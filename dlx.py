@@ -25,6 +25,8 @@ class Graph:
         self.header   = {}
         self.leftmost = {}
 
+        self.height = {}
+
         self.row_num = {}
 
     def create_graph(self, universe, sets):
@@ -44,6 +46,10 @@ class Graph:
         for node in header_nodes:
             self.up[node] = None
 
+        for node in header_nodes[1:]:
+            self.header[node] = node
+            self.height[node] = 1
+
         prev = {node.item: node for node in header_nodes[1:]}
         item_to_header = {node.item: node for node in header_nodes[1:]}
 
@@ -57,12 +63,14 @@ class Graph:
 
                 item_node = ItemNode()
                 item_nodes.append(item_node)
-
-                self.header[item_node] = item_to_header[item]
+                
+                header = item_to_header[item]
+                self.header[item_node] = header
+                self.height[header] += 1
 
             for item_node in item_nodes:
                 self.leftmost[item_node] = item_nodes[0]
-                self.row_num[item_node] = set_idx+1
+                self.row_num[item_node] = set_idx
             
             for prev_i, node in enumerate(item_nodes[1:]):
                 self.left[node] = item_nodes[prev_i]
@@ -96,7 +104,9 @@ class Graph:
                 if self.left[node]:  self.right[self.left[node]] = self.right[node]
                 if self.down[node]:  self.up[self.down[node]] = self.up[node]
                 if self.up[node]:    self.down[self.up[node]] = self.down[node]
-            
+                
+                self.height[self.header[node]] -= 1
+
             covered = []
             
             def cover_row(node):
@@ -140,6 +150,8 @@ class Graph:
                 if self.down[node]:  self.up[self.down[node]] = node
                 if self.left[node]:  self.right[self.left[node]] = node
                 if self.right[node]: self.left[self.right[node]] = node
+                 
+                self.height[self.header[node]] += 1
 
             stack = history.pop()
             for current in stack[::-1]:
@@ -150,8 +162,23 @@ class Graph:
 
         def backtrack():
             nonlocal solution_found
+
+            def choose_best_header():
+                best = None 
+                min_score = float("inf")
+
+                current = self.right[self.dummy_node] 
+                while current:
+                    score = self.height[current]
+                    if score < min_score:
+                        best = current
+                        min_score = score
+
+                    current = self.right[current]
+
+                return best
             
-            current = self.right[self.dummy_node]
+            current = choose_best_header() 
             assert current != self.dummy_node
 
             if not current:
@@ -168,15 +195,17 @@ class Graph:
                     return
 
                 uncover(current)
-
-                current = self.down[current]
                 solution.pop()
+
+                current = self.down[current] 
 
         backtrack()
 
         return solution_found, solution
 
     def visualize(self, filename):
+        print("Generating graph...", end=" ")
+
         from graphviz import Digraph
 
         dot = Digraph(comment="Dancing Links Graph")
@@ -215,8 +244,8 @@ def main(args):
     print(f"Universe: {universe}")
 
     print("Sets:")
-    for i, s in enumerate(sets):
-        print(f"{i+1}: {s}")
+    for set_idx, s in enumerate(sets):
+        print(f"{set_idx}: {s}")
 
     graph = Graph(universe, sets)
     if args.visualize:
@@ -225,7 +254,7 @@ def main(args):
     solution_found, solution = graph.solve()
     if solution_found:
         print(f"Solution indices: {solution}")
-        solution_sets = [sets[i-1] for i in solution]
+        solution_sets = [sets[set_idx] for set_idx in solution]
         print(f"Solution sets:    {solution_sets}")
     else:
         print("No solution found")
