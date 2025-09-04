@@ -4,9 +4,6 @@ This repository contains an implementation of
 [Donald Knuth's Dancing Links (DLX) algorithm](https://en.wikipedia.org/wiki/Dancing_Links)
 to solve [Exact Cover](https://en.wikipedia.org/wiki/Exact_cover) problems.
 
-Given a universe of items and a collections of sets, the program finds a subset
-of sets whose union exactly covers the universe.
-
 As an example, a Sudoku solver which makes use of this implementation is also
 included.
 
