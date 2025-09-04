@@ -1,6 +1,6 @@
 # Dancing Links (DLX) - Exact Cover Solver
 
-This repo contains an implementation of
+This repository contains an implementation of
 [Donald Knuth's Dancing Links (DLX) algorithm](https://en.wikipedia.org/wiki/Dancing_Links)
 to solve [Exact Cover](https://en.wikipedia.org/wiki/Exact_cover) problems.
 
