@@ -2,10 +2,10 @@
 
 This repository contains an implementation of the
 [Dancing Links (DLX) algorithm](https://en.wikipedia.org/wiki/Dancing_Links)
-to solve [Exact Cover](https://en.wikipedia.org/wiki/Exact_cover) problems
+to solve [Exact Cover](https://en.wikipedia.org/wiki/Exact_cover) problems.
 
 As an example, a Sudoku solver which makes use of this implementation is also
-included
+included.
 
 ## Example Usage
 
@@ -32,17 +32,17 @@ For example:
 python dlx.py "a, b, c" "a, c" "b" --visualize --visualize_filename "my_graph"
 ```
 
-Generates `my_graph.png` with Graphviz
+Generates `my_graph.png` with Graphviz.
 
 ### Library
 
 [`dlx.py`](https://github.com/sc546/dlx/blob/main/dlx.py) can also be used as a
 library, like in [`dlx_sudoku.py`](https://github.com/sc546/dlx/blob/main/dlx_sudoku.py).
 This program receives an incomplete Sudoku board as an argument, extracts the
-equivalent Exact Cover problem and searches for a solution
+equivalent Exact Cover problem and searches for a solution.
 
 The board has to be be passed as 1D string, without spaces and using 0s to
-represent empty cells
+represent empty cells.
 
 For example:
 
@@ -50,7 +50,7 @@ For example:
 python dlx_sudoku.py 006071030000040070000056900010004050080030000700500600068020000042900007097003500
 ```
 
-Returns a valid solution to the given Sudoku board
+Returns a valid solution to the given Sudoku board.
 
 ## Requirements
 
